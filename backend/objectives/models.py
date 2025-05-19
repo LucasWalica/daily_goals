@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User  
 
+
+
+
+
 class Goal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -14,6 +18,7 @@ class Goal(models.Model):
 
 
 
+#insert with submit form or automatically at 00:00 with celery and redis
 class DailyGoalStatus(models.Model):
     goal = models.ForeignKey(Goal, on_delete=models.CASCADE, related_name="daily_statuses")
     date = models.DateField()
