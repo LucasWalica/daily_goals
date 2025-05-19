@@ -1,0 +1,69 @@
+
+<div class="flex  absolute w-full justify-center align-middle">
+    <div class="mt-28 m-4 p-2 bg-custom-sky relative rounded-md md:w-1/2">
+        <form [formGroup]="this.registrationForm" (ngSubmit)="enviar($event)" class="m-4 text-center">
+            <div class="m-4">
+                <input formControlName="nickName" class="rounded-md text-center border-2 border-custom-lavanda" type="text" placeholder="nickaname"/>
+            </div>
+            @if (!this.registrationForm.valid && this.registrationForm.get('nickName')?.touched) {
+                @if (this.registrationForm.get('nickName')?.errors?.['required']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">Nickname is required</div>
+                }@else if (this.registrationForm.get('nickName')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">Min length is 3 charactes</div>
+                }@else if (this.registrationForm.get('nickName')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">Max length is 30 characters</div>
+                }
+            }
+            <div class="m-4">
+                <input formControlName="email" class="rounded-md text-center border-2 border-custom-lavanda" placeholder="email" type="email"/>
+            </div>
+            @if (!this.registrationForm.valid && this.registrationForm.get('email')?.touched) {
+                @if (this.registrationForm.get('email')?.errors?.['required']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">Email is required</div>
+                }@else if (this.registrationForm.get('email')?.errors?.['email']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">This field has to be a valid email</div>
+                }
+            }
+            <div class="m-4">
+                <input formControlName="password" type="password" class="rounded-md text-center border-2 border-custom-lavanda" placeholder="password" type="password"/>
+            </div>
+            @if (!this.registrationForm.valid && this.registrationForm.get('password')?.touched) {
+                @if (this.registrationForm.get('password')?.errors?.['required']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">password is required</div>
+                }@else if (this.registrationForm.get('password')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">min length is 10 characters</div>
+                }@else if (this.registrationForm.get('password')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">max length is 20 characters</div>
+                }
+            }
+            <div class="m-4">
+                <input formControlName="password2" class="rounded-md text-center border-2 border-custom-lavanda" placeholder="repeat password" type="password"/>
+            </div>
+            @if (!this.registrationForm.valid && this.registrationForm.get('password')?.touched) {
+                @if (this.registrationForm.get('password')?.errors?.['required']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">password is required</div>
+                }@else if (this.registrationForm.get('password')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">min length is 10 characters</div>
+                }@else if (this.registrationForm.get('password')?.errors?.['minlength']) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">max length is 20 characters</div>
+                }
+            }
+            @if (!this.registrationForm.valid && this.registrationForm.get('password')?.touched) {
+                @if (registrationForm.get('password2')?.touched && registrationForm.get('password2')?.hasError('passwordMismatch')) {
+                    <div class="text-red-800 bg-custom-lavanda m-2">passwords dont match</div>
+                }
+            }
+        
+            <div class="grid grid-cols-2 gap-4">
+                <button class="bg-custom-melocoton 
+                rounded-md border-magenta1 border-2 
+                hover:text-custom-lavanda hover:bg-custom-golden-yellow duration-150
+                text-xl shadow-md shadow-brown cursor-pointer" (click)="goToLogin()" >Go to login</button>
+                <button type="submit" class="bg-custom-melocoton 
+                rounded-md border-magenta1 border-2 
+                hover:text-custom-lavanda hover:bg-custom-golden-yellow duration-150
+                text-xl shadow-md shadow-brown cursor-pointer" >Register</button>
+            </div>
+        </form>
+    </div>  
+</div>
