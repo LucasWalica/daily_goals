@@ -1,0 +1,5 @@
+need to add frontend functionality
+
+maybe a day detail view would be good
+metrics view in calendar and need to add images to frontend public
+mnore styling
