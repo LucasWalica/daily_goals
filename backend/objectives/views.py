@@ -64,3 +64,18 @@ class CalendarListView(generics.ListAPIView):
         user = self.request.user 
         dailygoals = DailyGoalStatus.objects.filter(user=user)
         return dailygoals
+    
+
+class PostDailyGoalStatus(generics.CreateAPIView):
+    parser_classes =  [JSONParser]
+    permission_classes = [IsAuthenticated]
+    queryset = DailyGoalStatus.objects.all()
+    serializer_class = DailyGoalStatusSerializer
+
+
+
+class PostGoalView(generics.CreateAPIView):
+    parser_classes =  [JSONParser]
+    permission_classes = [IsAuthenticated]
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer

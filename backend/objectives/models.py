@@ -20,7 +20,7 @@ class Goal(models.Model):
 
 #insert with submit form or automatically at 00:00 with celery and redis
 class DailyGoalStatus(models.Model):
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, related_name="daily_statuses")
+    goal = models.ForeignKey(Goal, on_delete=models.DO_NOTHING, related_name="daily_statuses")
     date = models.DateField()
     completed = models.BooleanField(default=False)
 

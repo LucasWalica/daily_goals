@@ -1,2 +1,38 @@
-<app-navbar></app-navbar>
-<p>objectives-list works!</p>
+<div class="absolute w-full">
+    <app-navbar></app-navbar>
+    <div class="flex flex-col justify-center">
+        <div class="flex justify-center m-2">
+            <a (click)="this.showCreateView=!this.showCreateView" class="bg-custom-melocoton 
+            rounded-md border-magenta1 border-2 
+            hover:text-custom-lavanda hover:bg-custom-golden-yellow duration-150
+            text-xl shadow-md shadow-brown cursor-pointer pl-4 pr-4 p-2">
+                Create new goal
+            </a>
+        </div>
+        <div class="m-4 flex flex-col justify-center gap-5 text-center">
+            <div class="flex justify-center">
+                <h1 class="text-2xl text-custom-mint bg-black rounded-md w-1/2">Goals to achieve: </h1>
+            </div>
+            @for (goal of this.goals; track goal) {
+                <div>
+                    <a (click)="selectGoal(goal)"  [ngStyle]="{ 'background-color': goal.color }" class="bg-custom-mint 
+                    rounded-md border-magenta1 border-2 
+                    hover:text-custom-golden-yellow hover:bg-custom-lavanda duration-150
+                    text-xl shadow-md shadow-brown cursor-pointer pl-4 pr-4 p-2">
+                        {{goal.title}}
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>    
+
+
+@if (this.showDetailView) {
+    <app-objectives-detail [goal]="this.selectedGoal"></app-objectives-detail>
+}
+
+@if (this.showCreateView) {
+    <app-objective-create></app-objective-create>
+}

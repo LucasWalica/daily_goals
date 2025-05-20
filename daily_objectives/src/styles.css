@@ -11,3 +11,7 @@
     --color-custom-soft-grey: #ECEFF1;
     --color-custom-golden-yellow: #FFF59D;
 }
+
+html{
+    background-color: #ECEFF1;
+}

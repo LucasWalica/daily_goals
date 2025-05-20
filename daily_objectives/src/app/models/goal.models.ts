@@ -1,4 +1,5 @@
 export class Goal {
+    id:number;
     user: any;
     title: string;
     description: string;
@@ -7,6 +8,7 @@ export class Goal {
     end_time: string | null;
   
     constructor(
+      id:number,
       user: any,
       title: string,
       description: string,
@@ -14,6 +16,7 @@ export class Goal {
       start_time: string | null,
       end_time: string | null
     ) {
+      this.id=id;
       this.user = user;
       this.title = title;
       this.description = description;

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Goal } from '../models/goal.models';
+import { dailyGoalStatus } from '../models/dailyGoalStatus.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,56 @@ export class ObjectivesService {
     }
   }
 
+  async postDailyGoalStatus(goal:dailyGoalStatus){
+    const url = `${this.baseUrl}goal/daily/`;
+    try {
+      const token = this.auth.getToken();
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        }, 
+        body:JSON.stringify({goal})
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+      throw error;
+    }
+  }
+
+
+  async postGoal(goal:Goal){
+    const url = `${this.baseUrl}goal/`;
+    try {
+      const token = this.auth.getToken();
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        }, 
+        body:JSON.stringify(goal)
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+      throw error;
+    }
+  }
+
+
   async getGoal(id:number){
     const url = `${this.baseUrl}goal/${id}/`;
     try {
@@ -59,15 +111,16 @@ export class ObjectivesService {
   }
 
   async updateGoal(id:number, formData:any){
-    const url = `${this.baseUrl}goal/${id}`;
+    const url = `${this.baseUrl}goal/update/${id}/`;
     try {
       const token = this.auth.getToken();
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
           Authorization: `Token ${token}`,
+          'Content-Type': 'application/json'
         },
-        body:formData
+        body:JSON.stringify(formData)
       });
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
@@ -82,7 +135,7 @@ export class ObjectivesService {
   }
 
   async deleteGoal(id:number){
-    const url = `${this.baseUrl}goal/${id}`;
+    const url = `${this.baseUrl}goal/delete/${id}/`;
     try {
       const token = this.auth.getToken();
       const response = await fetch(url, {
@@ -97,10 +150,6 @@ export class ObjectivesService {
         throw new Error(`Error: ${response.status}`);
       }
   
-      const result = await response.json();
-  
-      console.log(result);
-      return result;
     } catch (error) {
       console.error('Error al enviar los datos:', error);
       throw error;
@@ -108,7 +157,7 @@ export class ObjectivesService {
   }
 
   async getUsersGoals(){
-    const url = `${this.baseUrl}goal/`;
+    const url = `${this.baseUrl}goal/user/list/`;
     try {
       const token = this.auth.getToken();
       const response = await fetch(url, {

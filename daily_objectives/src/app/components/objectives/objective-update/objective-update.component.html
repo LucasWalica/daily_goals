@@ -1,1 +1,86 @@
-<p>objective-update works!</p>
+<!-- Fullscreen overlay -->
+<div class="fixed top-0 left-0 w-screen h-screen z-50 bg-custom-lavanda bg-opacity-40 backdrop-blur-sm flex items-start justify-center pt-16">
+    <!-- Update form -->
+    <form
+      [formGroup]="goalUpdateForm"
+      (ngSubmit)="confirmUpdate()"
+      class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 space-y-6 border-4 border-custom-mint"
+    >
+      <h2 class="text-3xl font-semibold text-center text-custom-mint drop-shadow">
+        Update Your Goal 🎯
+      </h2>
+  
+      <!-- Title -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Title</label>
+        <input
+          type="text"
+          formControlName="title"
+          [placeholder]="goal.title"
+          class="w-full p-3 border border-custom-soft-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-mint transition"
+        />
+      </div>
+  
+      <!-- Description -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Description</label>
+        <textarea
+          formControlName="description"
+          rows="3"
+          [placeholder]="goal.description"
+          class="w-full p-3 border border-custom-soft-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-mint transition"
+        ></textarea>
+      </div>
+  
+      <!-- Color Picker -->
+      <div class="flex items-center gap-4">
+        <label class="block text-gray-700 font-medium">Pick a Color</label>
+        <input
+          type="color"
+          formControlName="color"
+          [value]="goal.color"
+          class="w-12 h-12 rounded-full border border-gray-300 cursor-pointer shadow-inner"
+        />
+      </div>
+  
+      <!-- Start Time -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Start Time (optional)</label>
+        <input
+          type="time"
+          formControlName="start_time"
+          [value]="goal.start_time"
+          class="w-full p-3 border border-custom-soft-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-sky transition"
+        />
+      </div>
+  
+      <!-- End Time -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">End Time (optional)</label>
+        <input
+          type="time"
+          formControlName="end_time"
+          [value]="goal.end_time"
+          class="w-full p-3 border border-custom-soft-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-sky transition"
+        />
+      </div>
+  
+      <!-- Buttons -->
+      <div class="flex justify-between pt-4">
+        <button
+          type="submit"
+          class="bg-custom-golden-yellow hover:bg-yellow-300 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transition"
+        >
+          Update
+        </button>
+        <button
+          type="button"
+          (click)="cancelUpdate()"
+          class="bg-custom-melocoton hover:bg-orange-300 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+  

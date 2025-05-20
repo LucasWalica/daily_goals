@@ -11,8 +11,8 @@ export class AchievmentsService {
   private baseUrl = "http://localhost:8000/api/achievments/";
 
 
-  async getUserAchievments(id:number){
-    const url = `${this.baseUrl}achievment/${id}/`;
+  async getUserAchievments(){
+    const url = `${this.baseUrl}achievments/`;
     try {
       const token = this.auth.getToken();
       const response = await fetch(url, {
@@ -35,8 +35,8 @@ export class AchievmentsService {
   }
 
 
-  async getAchievment(){
-    const url = `${this.baseUrl}achievments/`;
+  async getAchievment(id:number){
+    const url = `${this.baseUrl}achievment/${id}/`;
     try {
       const token = this.auth.getToken();
       const response = await fetch(url, {
