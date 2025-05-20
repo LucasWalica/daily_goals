@@ -1,5 +1,13 @@
-need to add frontend functionality
+
+
+
+
+celery needs to update each day at 00:00 every goal to set their
+done_today atribute to false
+and needs to create a dailygoal at 00:00 if it was not created??
+
 
 maybe a day detail view would be good
+
 metrics view in calendar and need to add images to frontend public
 mnore styling

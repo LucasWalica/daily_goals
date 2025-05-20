@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ObjectiveUpdateComponent } from "../objective-update/objective-update.component";
 import { CommonModule } from '@angular/common';
 import { ObjectiveCreateComponent } from "../objective-create/objective-create.component";
+import { dailyGoalStatus } from '../../../models/dailyGoalStatus.model';
 
 @Component({
   selector: 'app-objectives-detail',
@@ -31,6 +32,12 @@ export class ObjectivesDetailComponent implements OnInit{
     window.location.reload();
   }
 
+
+  async confirmDailyTask(){
+    let todayStr = new Date().toISOString().split('T')[0];
+    await this.objectiveService.postDailyGoalStatus(this.goal.id, todayStr, true);
+    window.location.reload();
+  }
 
   async confirmDelete(){
     await this.objectiveService.deleteGoal(this.goal.id);

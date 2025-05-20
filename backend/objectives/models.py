@@ -12,7 +12,7 @@ class Goal(models.Model):
     color = models.CharField(max_length=7, default="#FFFFFF")  
     start_time = models.TimeField(null=True, blank=True)  
     end_time = models.TimeField(null=True, blank=True)    
-
+    done_today = models.BooleanField(default=False, blank=False, null=False)
     def __str__(self):
         return f"{self.title} - {self.user.username}"
 

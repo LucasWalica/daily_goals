@@ -37,7 +37,7 @@ export class ObjectivesService {
     }
   }
 
-  async postDailyGoalStatus(goal:dailyGoalStatus){
+  async postDailyGoalStatus(goal:number, date:any, completed:boolean=true){
     const url = `${this.baseUrl}goal/daily/`;
     try {
       const token = this.auth.getToken();
@@ -47,7 +47,7 @@ export class ObjectivesService {
           'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         }, 
-        body:JSON.stringify({goal})
+        body:JSON.stringify({goal, date, completed})
       });
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);

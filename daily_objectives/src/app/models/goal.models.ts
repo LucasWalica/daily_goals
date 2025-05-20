@@ -6,6 +6,7 @@ export class Goal {
     color: string;
     start_time: string | null;  // mejor usar string para tiempo tipo "HH:mm:ss"
     end_time: string | null;
+    done_today: boolean;
   
     constructor(
       id:number,
@@ -14,7 +15,8 @@ export class Goal {
       description: string,
       color: string,
       start_time: string | null,
-      end_time: string | null
+      end_time: string | null,
+      done_today: boolean
     ) {
       this.id=id;
       this.user = user;
@@ -23,5 +25,6 @@ export class Goal {
       this.color = color;
       this.start_time = start_time;
       this.end_time = end_time;
+      this.done_today = done_today
     }
   }

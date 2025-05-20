@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "../reusable/navbar/navbar.component";
+import { Goal } from '../../models/goal.models';
+import { dailyGoalStatus } from '../../models/dailyGoalStatus.model';
+import { ObjectivesService } from '../../services/objectives.service';
 
-interface Goal {
-  date: string; // formato ISO YYYY-MM-DD
-  title: string;
-}
 
 @Component({
   selector: 'app-calendar',
@@ -21,22 +20,24 @@ export class CalendarComponent implements OnInit {
   currentMonth: number = {} as number;
   calendarDays: any[] = [];
 
+  allStatuses: dailyGoalStatus[] = [];
+
   weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  goals: Goal[] = [
-    { date: '2025-05-19', title: '30 min ejercicio' },
-    { date: '2025-05-19', title: 'Leer 10 páginas' },
-    { date: '2025-05-21', title: 'Cocinar sano' }
-  ];
+  constructor(private objectiveService:ObjectivesService){
 
-  ngOnInit() {
+  }
+
+  async ngOnInit() {
     const today = new Date();
     this.currentYear = today.getFullYear();
     this.currentMonth = today.getMonth();
+
+    this.allStatuses = await this.objectiveService.getCalender();
     this.generateCalendar();
   }
 
@@ -83,10 +84,17 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getGoalsForDate(date: Date): Goal[] {
-    const dateStr = date.toISOString().split('T')[0];
-    return this.goals.filter(goal => goal.date === dateStr);
+  getGoalsForDate(date: Date): Array<{ goal: Goal | null, completed: boolean }> {
+    const dateStr = this.getDateStringLocal(date);
+    return this.allStatuses
+      .filter(status => status.date === dateStr)
+      .map(status => ({
+        goal: status.goal_details ? status.goal_details : null,
+        completed: status.completed
+      }))
+      .filter(item => item.goal !== null);
   }
+  
 
   prevMonth() {
     if (this.currentMonth === 0) {
@@ -107,4 +115,12 @@ export class CalendarComponent implements OnInit {
     }
     this.generateCalendar();
   }
+
+  getDateStringLocal(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
 }

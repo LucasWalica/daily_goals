@@ -62,7 +62,7 @@ class CalendarListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user 
-        dailygoals = DailyGoalStatus.objects.filter(user=user)
+        dailygoals = DailyGoalStatus.objects.filter(goal__user=user)
         return dailygoals
     
 
@@ -71,6 +71,14 @@ class PostDailyGoalStatus(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = DailyGoalStatus.objects.all()
     serializer_class = DailyGoalStatusSerializer
+
+    def perform_create(self, serializer):
+        daily_status = serializer.save()
+
+        goal = daily_status.goal 
+        goal.done_today = True
+        goal.save()
+
 
 
 

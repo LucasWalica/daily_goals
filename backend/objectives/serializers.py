@@ -8,15 +8,18 @@ from .models import DailyGoalStatus, Goal
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
-        fields = ["id", "user", "title", "description", "color", "start_time", "end_time"]
-        read_only_fields = ["id", "user"]
+        fields = ["id", "user", "title", "description", "color", "start_time", "end_time", "done_today"]
+        read_only_fields = ["id", "user", "done_today"]
         
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
 
+
 class DailyGoalStatusSerializer(serializers.ModelSerializer):
+    goal = serializers.PrimaryKeyRelatedField(queryset=Goal.objects.all())
+    goal_details = GoalSerializer(source='goal', read_only=True)
+
     class Meta:
         model = DailyGoalStatus
-        fields = ["goal", "date", "completed"]
-        read_only_fields = ["id"]
+        fields = ["goal", "goal_details", "date", "completed"]
