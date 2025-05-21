@@ -11,3 +11,7 @@ maybe a day detail view would be good
 
 metrics view in calendar and need to add images to frontend public
 mnore styling
+
+
+celery -A core beat --loglevel=info
+elery -A core worker --loglevel=info

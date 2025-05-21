@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:6.0-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    env_file: ./.ENV
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+    env_file: ./.ENV
+
+
+  celery_worker:
+    build:
+      context: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - backend
+    env_file: ./.ENV
+
+  celery_beat:
+    build:
+      context: .
+    command: celery -A core beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - backend
+    env_file: ./.ENV
+
+volumes:
+  postgres_data:

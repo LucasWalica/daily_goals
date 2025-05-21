@@ -13,6 +13,29 @@ export class ObjectivesService {
   private baseUrl = "http://localhost:8000/api/objectives/";
 
 
+  async getUserData() {
+    const url = `${this.baseUrl}user/points/`;
+    try {
+      const token = this.auth.getToken();
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+      throw error;
+    }
+  }
+
 
   async getCalender(){
     const url = `${this.baseUrl}calendar/`;

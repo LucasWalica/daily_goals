@@ -4,6 +4,7 @@ from .serializers import DailyGoalStatusSerializer, GoalSerializer
 from .models import DailyGoalStatus, Goal
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
+from users.models import UserPoints
 # Create your views here.
 
 
@@ -78,6 +79,11 @@ class PostDailyGoalStatus(generics.CreateAPIView):
         goal = daily_status.goal 
         goal.done_today = True
         goal.save()
+        user_points, created = UserPoints.objects.get_or_create(user=self.request.user)
+        
+        # Sumar los 20 puntos
+        user_points.points += 20
+        user_points.save()
 
 
 

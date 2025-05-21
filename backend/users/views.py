@@ -9,6 +9,10 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
+from users.models import UserPoints
+from .serializers import UserPointsSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -57,4 +61,12 @@ class LoginView(APIView):
         else:
             return Response({"error": "Invalid credentials"}, status=401)
 
-    
+
+
+class GetUserPoints(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_points, created = UserPoints.objects.get_or_create(user=request.user)
+        serializer = UserPointsSerializer(user_points)
+        return Response(serializer.data)

@@ -30,3 +30,11 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email']
         )
         return user
+    
+
+from .models import UserPoints
+
+class UserPointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserPoints
+        fields = ['points']
