@@ -1,7 +1,15 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
+from .models import FCMToken
 
+
+
+
+class FCMTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FCMToken
+        fields = ['token', 'device_name']
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

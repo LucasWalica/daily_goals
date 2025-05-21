@@ -85,6 +85,34 @@ export class AuthService {
     }
   }
 
+  // need to generate token and get device_name
+  async postFCMToken(token:any, device_name:any){
+    fetch(`${this.url}user/fcmtoken/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({token, device_name})
+    })
+      .then(response => {
+        console.log('Response:', response);
+        if (response.ok) {
+          return response.json(); 
+        } else {
+          return response.json().then(errorData => {
+            throw new Error(JSON.stringify(errorData)); 
+          });
+        }
+      })
+      .then(data => {
+        console.log('Data:', data);
+        this.router.navigate(['']);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
   logout(){
     this.token = null;
     localStorage.removeItem('objective_token');

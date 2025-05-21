@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
-from users.models import UserPoints
-from .serializers import UserPointsSerializer
+from users.models import UserPoints, FCMToken
+from .serializers import UserPointsSerializer, FCMTokenSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -61,6 +61,34 @@ class LoginView(APIView):
         else:
             return Response({"error": "Invalid credentials"}, status=401)
 
+
+
+class FCMTokenRegisterView(generics.CreateAPIView):
+    queryset = FCMToken.objects.all()
+    serializer_class = FCMTokenSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        token_value = serializer.validated_data['token']
+        device_name = serializer.validated_data.get('device_name', '')
+
+        # Ensure token is unique and up-to-date for this user
+        fcm_token, created = FCMToken.objects.update_or_create(
+            token=token_value,
+            defaults={
+                'user': request.user,
+                'device_name': device_name
+            }
+        )
+
+        return Response({
+            "message": "FCM token registered successfully.",
+            "token": fcm_token.token,
+            "device_name": fcm_token.device_name
+        }, status=201 if created else 200)
 
 
 class GetUserPoints(APIView):
