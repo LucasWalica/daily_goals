@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 class Achievement(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    points_needed = models.IntegerField(default=100)
     icon = models.IntegerField(blank=True) 
 
 class UserAchievement(models.Model):

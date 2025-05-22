@@ -4,7 +4,8 @@ from celery import shared_task
 from django.utils import timezone
 from .models import Goal, DailyGoalStatus
 from users.models import FCMToken
-from backend.objectives.fcm import send_push_notification
+from .fcm import send_push_notification
+from datetime import timedelta
 
 
 @shared_task
@@ -13,6 +14,22 @@ def notify_goal_start_soon(user_id, title, message):
     if tokens:
         send_push_notification(list(tokens), title, message)
 
+
+
+@shared_task
+def check_goals_starting_soon():
+    now = timezone.now()
+    soon_limit = now + timedelta(minutes=5)
+
+    # Find goals starting between now and 5 minutes from now
+    goals_starting_soon = Goal.objects.filter(start_time__gte=now, start_time__lte=soon_limit)
+
+    for goal in goals_starting_soon:
+        notify_goal_start_soon.delay(
+            user_id=goal.user_id,
+            title=f"Your goal '{goal.title}' is about to start",
+            message=goal.description or "Get ready to start your goal!"
+        )
 
 @shared_task
 def notify_users_daily_checkin():

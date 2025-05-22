@@ -2,6 +2,11 @@ import { Router } from '@angular/router';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
+import { getMessaging, getToken, Messaging } from "firebase/messaging";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +14,24 @@ import { isPlatformBrowser } from '@angular/common';
 
 export class AuthService {
 
+
+firebaseConfig = {
+  apiKey: "AIzaSyAtWuBiJnkZ0Xuz9YjHKKtjhG5hc881kkU",
+  authDomain: "daily-objectives-3e576.firebaseapp.com",
+  projectId: "daily-objectives-3e576",
+  storageBucket: "daily-objectives-3e576.firebasestorage.app",
+  messagingSenderId: "804064260090",
+  appId: "1:804064260090:web:d828b016806b4c6292be43",
+  measurementId: "G-BQ3RB851ZC"
+};
+
+
+// Initialize Firebase
+
+app = initializeApp(this.firebaseConfig);
+
+analytics = getAnalytics(this.app)
+messaging = getMessaging(this.app);
 
 
   constructor(private router:Router, @Inject(PLATFORM_ID) private platformId: Object){}
@@ -71,6 +94,7 @@ export class AuthService {
         if (responseBody.token) {
           console.log(responseBody.token);
           this.setToken(responseBody.token);
+          await this.postFCMToken();
         }
         
         this.router.navigate(['home']);
@@ -86,13 +110,25 @@ export class AuthService {
   }
 
   // need to generate token and get device_name
-  async postFCMToken(token:any, device_name:any){
+  async postFCMToken(){
+    
+    const authToken = this.getToken();
+    const fcmToken = await getToken(this.messaging, {
+      vapidKey: 'BMPEmdIW_vr2mPXavN3r7Ub5bjPR418nBr1utIYke_WguY1Bc5C6bgdzwzTzMMKhty1RLxkT1ngCRCfDT4vhXo4 ', // Esto lo configuras desde Firebase > Cloud Messaging > Web Push
+    });
+    if (!fcmToken) {
+      console.warn("No FCM token generated.");
+      return;
+    }
+     const device_name = navigator.userAgent;
+
     fetch(`${this.url}user/fcmtoken/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Token ${authToken}`
       },
-      body: JSON.stringify({token, device_name})
+      body: JSON.stringify({token: fcmToken, device_name})
     })
       .then(response => {
         console.log('Response:', response);
@@ -116,8 +152,6 @@ export class AuthService {
   logout(){
     this.token = null;
     localStorage.removeItem('objective_token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('inquilino_id');
     this.router.navigate(['']);
   }
 
@@ -142,4 +176,7 @@ export class AuthService {
     return !!token;
   }
 
+
+
+  
 }

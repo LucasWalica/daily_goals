@@ -62,7 +62,6 @@ class LoginView(APIView):
             return Response({"error": "Invalid credentials"}, status=401)
 
 
-
 class FCMTokenRegisterView(generics.CreateAPIView):
     queryset = FCMToken.objects.all()
     serializer_class = FCMTokenSerializer
@@ -75,14 +74,18 @@ class FCMTokenRegisterView(generics.CreateAPIView):
         token_value = serializer.validated_data['token']
         device_name = serializer.validated_data.get('device_name', '')
 
-        # Ensure token is unique and up-to-date for this user
-        fcm_token, created = FCMToken.objects.update_or_create(
+        # Allow multiple tokens per user (one per device/browser)
+        fcm_token, created = FCMToken.objects.get_or_create(
+            user=request.user,
             token=token_value,
-            defaults={
-                'user': request.user,
-                'device_name': device_name
-            }
+            defaults={'device_name': device_name}
         )
+
+        if not created:
+            # Optionally update the device name if the token already exists
+            if fcm_token.device_name != device_name:
+                fcm_token.device_name = device_name
+                fcm_token.save()
 
         return Response({
             "message": "FCM token registered successfully.",
