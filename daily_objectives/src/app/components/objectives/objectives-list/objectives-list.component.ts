@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { ObjectivesDetailComponent } from "../objectives-detail/objectives-detail.component";
 import { CommonModule } from '@angular/common';
 import { ObjectiveCreateComponent } from "../objective-create/objective-create.component";
+import { FooterComponent } from "../../reusable/footer/footer.component";
 
 @Component({
   selector: 'app-objectives-list',
   standalone: true,
-  imports: [NavbarComponent, ObjectivesDetailComponent, CommonModule, ObjectiveCreateComponent],
+  imports: [NavbarComponent, ObjectivesDetailComponent, CommonModule, ObjectiveCreateComponent, FooterComponent],
   templateUrl: './objectives-list.component.html',
   styleUrl: './objectives-list.component.css'
 })

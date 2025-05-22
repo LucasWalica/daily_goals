@@ -15,7 +15,7 @@ class UserAchievmentListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user 
-        achiements = UserAchievement.objects.filter(user=user)
+        achiements = UserAchievement.objects.filter(user=user).order_by('-achievement__points_needed')
         return achiements
     
 

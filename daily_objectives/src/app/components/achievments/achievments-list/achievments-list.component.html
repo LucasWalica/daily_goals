@@ -1,2 +1,28 @@
-<app-navbar></app-navbar>
-<p>achievments-list works!</p>
+<div class="absolute w-full min-h-screen bg-gray-100">
+  <app-navbar></app-navbar>
+
+  <div class="flex flex-wrap justify-center gap-6 p-6">
+    @if (this.achievments.length>0) {
+        @for (achievment of this.achievments; track achievment) {
+          <div
+            class="w-64 flex flex-col items-center p-6 rounded-2xl bg-custom-golden-yellow shadow-lg text-center space-y-4"
+          >
+            <h1 class="text-xl font-semibold bg-custom-melocoton px-4 py-2 rounded-md shadow">
+              {{ achievment.achievement.name }}
+            </h1>
+            <img
+              [src]="achievment.achievement.icon"
+              alt="achievement icon"
+              class="h-44 w-44 object-contain"
+            />
+            <p class="text-sm text-gray-700">{{ achievment.achievement.description }}</p>
+          </div>
+        }
+    }@else {
+        <div class="text-center text-xl">
+            <h1>Complete your goals to obtain achievments</h1>
+        </div>
+    }
+  </div>
+  <app-footer></app-footer>
+</div>

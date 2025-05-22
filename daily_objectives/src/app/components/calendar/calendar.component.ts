@@ -5,12 +5,13 @@ import { NavbarComponent } from "../reusable/navbar/navbar.component";
 import { Goal } from '../../models/goal.models';
 import { dailyGoalStatus } from '../../models/dailyGoalStatus.model';
 import { ObjectivesService } from '../../services/objectives.service';
+import { FooterComponent } from "../reusable/footer/footer.component";
 
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, FooterComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })

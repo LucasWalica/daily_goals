@@ -7,12 +7,13 @@ from .models import Achievement, UserAchievement
 class AchievmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
-        fields = ["name", "description", "icon"]
+        fields = ["name", "description", "points_needed" ,"icon"]
 
 
 class UserAchievmentSerializer(serializers.ModelSerializer):
+    achievement = AchievmentSerializer(read_only=True)
     class Meta:
         model = UserAchievement
-        fields = ["user", "achievment", "date_earned"]
+        fields = ["user", "achievement", "date_earned"]
         read_only_fields = ["user", "achievment"]
 

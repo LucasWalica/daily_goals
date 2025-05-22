@@ -7,5 +7,4 @@ export const routes: Routes = [
     {path:"objectives", loadComponent: () => import("./components/objectives/objectives-list/objectives-list.component").then(m=>m.ObjectivesListComponent)},
     {path:"objective", loadComponent: () => import("./components/objectives/objectives-detail/objectives-detail.component").then(m=>m.ObjectivesDetailComponent)},
     {path:"achievments", loadComponent: () => import("./components/achievments/achievments-list/achievments-list.component").then(m=>m.AchievmentsListComponent)},
-    {path:"achievment", loadComponent: () => import("./components/achievments/achievments-detail/achievments-detail.component").then(m=>m.AchievmentsDetailComponent)},
 ];
