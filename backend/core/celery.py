@@ -24,7 +24,7 @@ app.conf.beat_schedule = {
     },
 
     "assign_achievements_based_on_points": {
-        "task":"assign_achievements_based_on_points",
+        "task":"achievments.tasks.assign_achievements_based_on_points",
         "schedule": crontab(hour=0, minute=0)
     },
 

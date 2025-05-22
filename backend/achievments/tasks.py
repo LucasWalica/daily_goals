@@ -1,7 +1,8 @@
 from celery import shared_task 
 from django.contrib.auth.models import User
 from .models import Achievement
-from users.models import UserAchievement, UserPoints
+from users.models import UserPoints
+from achievments.models import  UserAchievement
 
 
 @shared_task
