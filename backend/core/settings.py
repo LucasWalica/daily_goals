@@ -16,7 +16,15 @@ SECRET_KEY = 'django-insecure-shojxf)ir*2k=mxf)q&o7%!xq!x5bpc&qmq$cci7v#^n&qyrlz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://dailygoals-production.up.railway.app',
+]
+
+ALLOWED_HOSTS = [
+    'dailygoals-production.up.railway.app',
+    'localhost',  # por si lo usas local
+]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
