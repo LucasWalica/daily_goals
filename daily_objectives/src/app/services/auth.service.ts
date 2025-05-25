@@ -5,6 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { getMessaging, getToken, Messaging } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { isSupported } from "firebase/analytics";
 
 
 
@@ -15,26 +16,31 @@ import { getAnalytics } from "firebase/analytics";
 export class AuthService {
 
 
-firebaseConfig = {
-  apiKey: "AIzaSyAtWuBiJnkZ0Xuz9YjHKKtjhG5hc881kkU",
-  authDomain: "daily-objectives-3e576.firebaseapp.com",
-  projectId: "daily-objectives-3e576",
-  storageBucket: "daily-objectives-3e576.firebasestorage.app",
-  messagingSenderId: "804064260090",
-  appId: "1:804064260090:web:d828b016806b4c6292be43",
-  measurementId: "G-BQ3RB851ZC"
-};
+  firebaseConfig = {
+    apiKey: "AIzaSyAtWuBiJnkZ0Xuz9YjHKKtjhG5hc881kkU",
+    authDomain: "daily-objectives-3e576.firebaseapp.com",
+    projectId: "daily-objectives-3e576",
+    storageBucket: "daily-objectives-3e576.firebasestorage.app",
+    messagingSenderId: "804064260090",
+    appId: "1:804064260090:web:d828b016806b4c6292be43",
+    measurementId: "G-BQ3RB851ZC"
+  };
 
+  app = initializeApp(this.firebaseConfig);
+  analytics: any = null;
+  messaging = getMessaging(this.app);
 
-// Initialize Firebase
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
+    this.initAnalytics();
+  }
 
-app = initializeApp(this.firebaseConfig);
-
-analytics = getAnalytics(this.app)
-messaging = getMessaging(this.app);
-
-
-  constructor(private router:Router, @Inject(PLATFORM_ID) private platformId: Object){}
+  async initAnalytics() {
+    if (isPlatformBrowser(this.platformId) && await isSupported()) {
+      this.analytics = getAnalytics(this.app);
+    } else {
+      this.analytics = null;
+    }
+  }
 
   private url = "https://dailygoals-production.up.railway.app/api/users/";
   private token:string|null = {} as string;
