@@ -6,7 +6,7 @@
     "serve:ssr": "node server.js",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production",
+   "build": "ng build && ng run daily_objectives:server" 
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:daily_objectives": "node dist/daily_objectives/server/server.mjs"
