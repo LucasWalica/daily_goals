@@ -2,6 +2,8 @@
   "name": "daily-objectives",
   "version": "0.0.0",
   "scripts": {
+    "build:ssr": "ng run daily_objectives:server && ng run daily_objectives:build",
+    "serve:ssr": "node server.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration production",
