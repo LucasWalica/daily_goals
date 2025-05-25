@@ -27,18 +27,19 @@ export class AuthService {
   };
 
   app = initializeApp(this.firebaseConfig);
+  messaging: Messaging | null = null;
   analytics: any = null;
-  messaging = getMessaging(this.app);
 
   constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
-    this.initAnalytics();
+    if (isPlatformBrowser(this.platformId)) {
+      this.messaging = getMessaging(this.app);
+      this.initAnalytics();
+    }
   }
 
   async initAnalytics() {
-    if (isPlatformBrowser(this.platformId) && await isSupported()) {
+    if (await isSupported()) {
       this.analytics = getAnalytics(this.app);
-    } else {
-      this.analytics = null;
     }
   }
 
@@ -124,6 +125,7 @@ async postFCMToken() {
     const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
     
     // ✅ 2. Obtener el token usando ese Service Worker
+    if(!this.messaging) return;
     const fcmToken = await getToken(this.messaging, {
       vapidKey: 'BMPEmdIW_vr2mPXavN3r7Ub5bjPR418nBr1utIYke_WguY1Bc5C6bgdzwzTzMMKhty1RLxkT1ngCRCfDT4vhXo4',
       serviceWorkerRegistration: registration,
