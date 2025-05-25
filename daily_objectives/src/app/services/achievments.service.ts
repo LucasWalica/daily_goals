@@ -8,7 +8,7 @@ export class AchievmentsService {
 
   constructor(private auth:AuthService) { }
 
-  private baseUrl = "http://localhost:8000/api/achievments/";
+  private baseUrl = "https://dailygoals-production.up.railway.app/api/achievments/";
 
 
   async getUserAchievments(){

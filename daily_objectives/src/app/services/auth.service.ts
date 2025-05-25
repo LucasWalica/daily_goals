@@ -36,7 +36,7 @@ messaging = getMessaging(this.app);
 
   constructor(private router:Router, @Inject(PLATFORM_ID) private platformId: Object){}
 
-  private url = "http://localhost:8000/api/users/";
+  private url = "https://dailygoals-production.up.railway.app/api/users/";
   private token:string|null = {} as string;
 
   register(username:string,email:string, password:string){
@@ -108,46 +108,52 @@ messaging = getMessaging(this.app);
       return 0; // Error
     }
   }
+async postFCMToken() {
+  if (!isPlatformBrowser(this.platformId)) return;
 
-  // need to generate token and get device_name
-  async postFCMToken(){
+  const authToken = this.getToken();
+
+  try {
+    // 🔧 1. Registrar el Service Worker manualmente
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
     
-    const authToken = this.getToken();
+    // ✅ 2. Obtener el token usando ese Service Worker
     const fcmToken = await getToken(this.messaging, {
-      vapidKey: 'BMPEmdIW_vr2mPXavN3r7Ub5bjPR418nBr1utIYke_WguY1Bc5C6bgdzwzTzMMKhty1RLxkT1ngCRCfDT4vhXo4 ', // Esto lo configuras desde Firebase > Cloud Messaging > Web Push
+      vapidKey: 'BMPEmdIW_vr2mPXavN3r7Ub5bjPR418nBr1utIYke_WguY1Bc5C6bgdzwzTzMMKhty1RLxkT1ngCRCfDT4vhXo4',
+      serviceWorkerRegistration: registration,
     });
+
     if (!fcmToken) {
-      console.warn("No FCM token generated.");
+      console.warn("No se generó el FCM token.");
       return;
     }
-     const device_name = navigator.userAgent;
 
-    fetch(`${this.url}user/fcmtoken/`, {
+    // 📱 3. Obtener info del dispositivo
+    const device_name = navigator.userAgent;
+
+    // 🚀 4. Enviar token al backend
+    const response = await fetch(`${this.url}user/fcmtoken/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${authToken}`
+        Authorization: `Token ${authToken}`,
       },
-      body: JSON.stringify({token: fcmToken, device_name})
-    })
-      .then(response => {
-        console.log('Response:', response);
-        if (response.ok) {
-          return response.json(); 
-        } else {
-          return response.json().then(errorData => {
-            throw new Error(JSON.stringify(errorData)); 
-          });
-        }
-      })
-      .then(data => {
-        console.log('Data:', data);
-        this.router.navigate(['']);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+      body: JSON.stringify({ token: fcmToken, device_name }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(JSON.stringify(errorData));
+    }
+
+    const data = await response.json();
+    console.log('FCM Token enviado correctamente:', data);
+    
+  } catch (error) {
+    console.error('Error al obtener o enviar el FCM token:', error);
   }
+}
+
 
   logout(){
     this.token = null;
