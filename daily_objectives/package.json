@@ -2,14 +2,12 @@
   "name": "daily-objectives",
   "version": "0.0.0",
   "scripts": {
-    "build:ssr": "ng run daily_objectives:server && ng run daily_objectives:build",
-    "serve:ssr": "node server.js",
     "ng": "ng",
-    "start": "ng serve",
-   "build": "ng build && ng run daily_objectives:server" 
+    "vercel-build": "ng build --configuration production && ng run daily_objectives:server:production",
+    "start": "node dist/daily_objectives/server/main.js",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:daily_objectives": "node dist/daily_objectives/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
